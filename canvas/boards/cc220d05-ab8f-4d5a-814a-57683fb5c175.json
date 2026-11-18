@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "nodes": [
+    {
+      "id": "design-document",
+      "type": "document",
+      "data": {
+        "documentId": "neon-stack-design"
+      },
+      "title": "游戏主设计文档"
+    },
+    {
+      "id": "ui-mockup",
+      "type": "image",
+      "data": {
+        "prompt": "Premium cyberpunk Tetris browser game screenshot UI design, widescreen 16:9. Title NEON STACK top left in condensed italic futuristic typography with a small cyan tetromino symbol. Deep midnight navy background with a moody rainy futuristic city, glowing cyan architecture left and magenta neon right, atmospheric dark center. A tall narrow 10 by 20 square cell Tetris board centered, thin cyan outline, dark glass cells, colorful luminous cyan magenta purple amber blocks neatly stacked in bottom rows and a descending T piece. Restrained left sidebar with SCORE 001280, LEVEL 01, LINES 04, a small HOLD piece. Right sidebar NEXT queue three pieces and concise keyboard hints. Thin technical lines, tiny terminal labels, elegant functional real playable game interface. Sharp readable futuristic UI, lots of negative space, no humans, no huge text or dashboard cards.",
+        "model": {
+          "provider": "codex-cli",
+          "id": "codex-image"
+        },
+        "resolution": "1K",
+        "aspectRatio": "16:9",
+        "images": [],
+        "assetId": "cd9917df-1263-4375-8631-4ac3eff9a5d0"
+      },
+      "title": "参考视觉稿 · 桌面游戏界面",
+      "description": "确定城市夜景、霓虹色与中心棋盘的视觉层级；仅作视觉参考。"
+    },
+    {
+      "id": "city-production",
+      "type": "image",
+      "data": {
+        "prompt": "Production environment background for a sophisticated cyberpunk puzzle video game, panoramic rainy future Tokyo skyline at night, widescreen 16:9. Deep midnight navy and indigo atmosphere. Tall futuristic buildings concentrated along the far left and far right edges, cyan-lit windows and thin vertical cyan neon in left quarter, electric magenta pink neon strips in right quarter, distant bridges, very subtle rainy reflections, hazy futuristic city depth. Keep the entire central 55 percent very dark, uncluttered low contrast misty navy negative space where a gameplay board will be overlaid. Tasteful cinematic concept art with detailed architecture, atmospheric rain, dramatic but restrained lighting, blue black shadows, elegant sophisticated sci fi. No people, no vehicles foreground, absolutely no text, no logos, no interface, no borders, no grid, no blocks.",
+        "model": {
+          "provider": "codex-cli",
+          "id": "codex-image"
+        },
+        "resolution": "2K",
+        "aspectRatio": "16:9",
+        "images": [
+          {
+            "nodeId": "ui-mockup",
+            "type": "node"
+          }
+        ],
+        "assetId": "2d5157c4-90bd-4717-a18f-337713448982"
+      },
+      "title": "生产素材 · 雨夜霓虹城市背景",
+      "description": "进入实际游戏的全屏环境背景，复制到 public/art/neon-city.png；中心留暗以保证棋盘可读。"
+    },
+    {
+      "id": "playtest-document",
+      "type": "document",
+      "data": {
+        "documentId": "neon-stack-playtest"
+      },
+      "title": "实际试玩与验证记录"
+    }
+  ],
+  "edges": [],
+  "id": "cc220d05-ab8f-4d5a-814a-57683fb5c175"
+}

@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "assets": {
+    "cd9917df-1263-4375-8631-4ac3eff9a5d0": {
+      "name": "output.png",
+      "path": "assets/imported/output.png",
+      "libraryAssetId": "cd9917df-1263-4375-8631-4ac3eff9a5d0",
+      "prompt": "Premium cyberpunk Tetris browser game screenshot UI design, widescreen 16:9. Title NEON STACK top left in condensed italic futuristic typography with a small cyan tetromino symbol. Deep midnight navy background with a moody rainy futuristic city, glowing cyan architecture left and magenta neon right, atmospheric dark center. A tall narrow 10 by 20 square cell Tetris board centered, thin cyan outline, dark glass cells, colorful luminous cyan magenta purple amber blocks neatly stacked in bottom rows and a descending T piece. Restrained left sidebar with SCORE 001280, LEVEL 01, LINES 04, a small HOLD piece. Right sidebar NEXT queue three pieces and concise keyboard hints. Thin technical lines, tiny terminal labels, elegant functional real playable game interface. Sharp readable futuristic UI, lots of negative space, no humans, no huge text or dashboard cards."
+    },
+    "cfaa82ae-c424-49d7-a308-42dfd1b658a0": {
+      "name": "output.png",
+      "path": "assets/imported/output-2.png",
+      "libraryAssetId": "cfaa82ae-c424-49d7-a308-42dfd1b658a0",
+      "prompt": "Production environment background for a sophisticated cyberpunk puzzle video game, panoramic rainy future Tokyo skyline at night, widescreen 16:9. Deep midnight navy and indigo atmosphere. Tall futuristic buildings concentrated along the far left and far right edges, cyan-lit windows and thin vertical cyan neon in left quarter, electric magenta pink neon strips in right quarter, distant bridges, very subtle rainy reflections, hazy futuristic city depth. Keep the entire central 55 percent very dark, uncluttered low contrast misty navy negative space where a gameplay board will be overlaid. Tasteful cinematic concept art with detailed architecture, atmospheric rain, dramatic but restrained lighting, blue black shadows, elegant sophisticated sci fi. No people, no vehicles foreground, absolutely no text, no logos, no interface, no borders, no grid, no blocks."
+    },
+    "2d5157c4-90bd-4717-a18f-337713448982": {
+      "name": "output.png",
+      "path": "assets/imported/output-3.png",
+      "libraryAssetId": "2d5157c4-90bd-4717-a18f-337713448982",
+      "prompt": "Production environment background for a sophisticated cyberpunk puzzle video game, panoramic rainy future Tokyo skyline at night, widescreen 16:9. Deep midnight navy and indigo atmosphere. Tall futuristic buildings concentrated along the far left and far right edges, cyan-lit windows and thin vertical cyan neon in left quarter, electric magenta pink neon strips in right quarter, distant bridges, very subtle rainy reflections, hazy futuristic city depth. Keep the entire central 55 percent very dark, uncluttered low contrast misty navy negative space where a gameplay board will be overlaid. Tasteful cinematic concept art with detailed architecture, atmospheric rain, dramatic but restrained lighting, blue black shadows, elegant sophisticated sci fi. No people, no vehicles foreground, absolutely no text, no logos, no interface, no borders, no grid, no blocks."
+    }
+  }
+}

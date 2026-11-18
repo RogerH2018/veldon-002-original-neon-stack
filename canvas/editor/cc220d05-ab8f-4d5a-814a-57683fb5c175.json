@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "nodes": {
+    "design-document": {
+      "x": 96,
+      "y": 96
+    },
+    "ui-mockup": {
+      "x": 96,
+      "y": 576
+    },
+    "city-production": {
+      "x": 96,
+      "y": 1056
+    },
+    "playtest-document": {
+      "x": 656,
+      "y": 96
+    }
+  },
+  "viewport": {
+    "x": 64,
+    "y": 32,
+    "zoom": 1
+  },
+  "view": "canvas"
+}

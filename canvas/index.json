@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "boards": [
+    {
+      "id": "cc220d05-ab8f-4d5a-814a-57683fb5c175",
+      "name": "NEON STACK · 游戏设计"
+    }
+  ],
+  "documents": [
+    {
+      "id": "neon-stack-design",
+      "title": "NEON STACK · 游戏设计"
+    },
+    {
+      "id": "neon-stack-playtest",
+      "title": "NEON STACK · 验证记录"
+    }
+  ],
+  "mainDocumentId": "neon-stack-design"
+}

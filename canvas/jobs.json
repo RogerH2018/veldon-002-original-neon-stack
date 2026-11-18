@@ -1,0 +1,104 @@
+[
+  {
+    "recoveryId": "9ce436eb-87c4-44ba-bcff-3d7da4f2ffd5",
+    "inputRevision": "a5f7b6b110f474bf5224f39f0ff74fd89355b276ab2fc3ef48f098d916b3cbca",
+    "id": "bcbfe81e-0e0b-4b26-a40a-bee351a0d35c",
+    "toolId": "generate-image",
+    "createdAt": "2026-11-17T10:26:45.943Z",
+    "status": "succeeded",
+    "title": "Production environment background for a sophisticated cyberpunk puzzle video game, panoramic rainy future Tokyo skyline at night, widescreen 16:9. Deep midnight navy and indigo atmosphere. Tall futuri",
+    "context": {
+      "projectId": "73c7eab6-b30e-47cc-9349-fe8c11ed311f",
+      "boardId": "cc220d05-ab8f-4d5a-814a-57683fb5c175",
+      "nodeId": "city-production"
+    },
+    "upstream": {
+      "ui-mockup": "asset:cd9917df-1263-4375-8631-4ac3eff9a5d0"
+    },
+    "model": {
+      "provider": "codex-cli",
+      "id": "codex-image"
+    },
+    "run": {
+      "id": "6d130bdb-041b-4373-b746-1fd95b9b4542",
+      "toolId": "generate-image",
+      "model": {
+        "provider": "codex-cli",
+        "id": "codex-image"
+      },
+      "createdAt": "2026-11-17T10:27:49.090Z",
+      "files": [
+        {
+          "name": "output.png",
+          "mediaType": "image/png",
+          "assetId": "2d5157c4-90bd-4717-a18f-337713448982"
+        }
+      ]
+    }
+  },
+  {
+    "recoveryId": "312443b9-060a-43b2-8784-34fe58c7eb41",
+    "inputRevision": "d6dd6f728306467621ffc47be641afb4538d2838c3182134c3f5b1b9191da91a",
+    "id": "0836124b-880a-447b-ada6-37fcd31a85de",
+    "toolId": "generate-image",
+    "createdAt": "2026-11-17T10:23:02.278Z",
+    "status": "failed",
+    "title": "Production environment background for a sophisticated cyberpunk puzzle video game, panoramic rainy future Tokyo skyline at night, widescreen 16:9. Deep midnight navy and indigo atmosphere. Tall futuri",
+    "context": {
+      "projectId": "73c7eab6-b30e-47cc-9349-fe8c11ed311f",
+      "boardId": "cc220d05-ab8f-4d5a-814a-57683fb5c175",
+      "nodeId": "city-production"
+    },
+    "upstream": {},
+    "model": {
+      "provider": "codex-cli",
+      "id": "codex-image"
+    },
+    "input": {
+      "prompt": "Production environment background for a sophisticated cyberpunk puzzle video game, panoramic rainy future Tokyo skyline at night, widescreen 16:9. Deep midnight navy and indigo atmosphere. Tall futuristic buildings concentrated along the far left and far right edges, cyan-lit windows and thin vertical cyan neon in left quarter, electric magenta pink neon strips in right quarter, distant bridges, very subtle rainy reflections, hazy futuristic city depth. Keep the entire central 55 percent very dark, uncluttered low contrast misty navy negative space where a gameplay board will be overlaid. Tasteful cinematic concept art with detailed architecture, atmospheric rain, dramatic but restrained lighting, blue black shadows, elegant sophisticated sci fi. No people, no vehicles foreground, absolutely no text, no logos, no interface, no borders, no grid, no blocks.",
+      "resolution": "2K",
+      "aspectRatio": "16:9",
+      "images": [],
+      "imageModel": {
+        "provider": "codex-cli",
+        "id": "codex-image"
+      }
+    },
+    "error": "canvas/boards/cc220d05-ab8f-4d5a-814a-57683fb5c175.json: invalid JSON"
+  },
+  {
+    "recoveryId": "6a72f154-01a3-4469-b16e-844c678f33e6",
+    "inputRevision": "232daaa443c2c6f3a5a0cc24b49d23a0d5f89d128aef8eb24787454546723127",
+    "id": "18cc3761-8ba3-445a-bbb6-1113aedcfd80",
+    "toolId": "generate-image",
+    "createdAt": "2026-11-17T10:20:27.362Z",
+    "status": "succeeded",
+    "title": "Premium cyberpunk Tetris browser game screenshot UI design, widescreen 16:9. Title NEON STACK top left in condensed italic futuristic typography with a small cyan tetromino symbol. Deep midnight navy ",
+    "context": {
+      "projectId": "73c7eab6-b30e-47cc-9349-fe8c11ed311f",
+      "boardId": "cc220d05-ab8f-4d5a-814a-57683fb5c175",
+      "nodeId": "ui-mockup"
+    },
+    "upstream": {},
+    "model": {
+      "provider": "codex-cli",
+      "id": "codex-image"
+    },
+    "run": {
+      "id": "d5f5c62f-63df-4f01-b052-bdcefd4939dd",
+      "toolId": "generate-image",
+      "model": {
+        "provider": "codex-cli",
+        "id": "codex-image"
+      },
+      "createdAt": "2026-11-17T10:21:33.318Z",
+      "files": [
+        {
+          "name": "output.png",
+          "mediaType": "image/png",
+          "assetId": "cd9917df-1263-4375-8631-4ac3eff9a5d0"
+        }
+      ]
+    }
+  }
+]
