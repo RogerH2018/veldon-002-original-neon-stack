@@ -47,4 +47,6 @@ npm run build
 
 The static build is written to `dist/`. The game uses Vite, vanilla JavaScript, Canvas 2D, and Web Audio. Design files live in `canvas/` and runtime artwork in `public/art/`.
 
-`gh-pages` 分支托管 `dist/` 的静态构建。 The `gh-pages` branch publishes the static build to GitHub Pages. [部署分支 / Deployment branch](https://github.com/RogerH2018/veldon-002-original-neon-stack/tree/gh-pages)
+GitHub Pages 从 `main` 分支的 `docs/` 发布。更新试玩版时，运行 `npm run build`，将 `dist/` 里的构建文件复制到 `docs/`，保留 `.nojekyll` 和 `cover.jpg`，然后提交并推送 `main`。
+
+GitHub Pages publishes `docs/` from `main`. To release an update, run `npm run build`, copy the generated files from `dist/` into `docs/` while keeping `.nojekyll` and `cover.jpg`, and commit and push `main`.
