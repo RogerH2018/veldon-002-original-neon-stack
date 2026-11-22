@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "scripts": {"dev":"vite --host", "build":"vite build", "test":"node --test tests/engine.test.js"},
+  "scripts": {"dev":"vite --host", "build":"vite build", "test":"node --test"},
   "devDependencies": {"vite":"^6.1.0"}
 }

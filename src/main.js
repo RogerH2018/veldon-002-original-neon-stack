@@ -2,7 +2,9 @@ import './style.css';
 import { NeonGame } from './engine.js';
 import { Renderer, drawMini } from './render.js';
 import { NeonAudio } from './audio.js';
+import { BoardInput, bindTouchControls } from './board-input.js';
 import { copy } from './copy.js';
+import { createDuel } from './duel.js';
 
 const icons={
   play:'<path d="m9 5 11 7-11 7Z"/>',
@@ -45,6 +47,7 @@ $('#app').innerHTML=`
     <header class="topbar">
       <div class="brand"><div class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></div><div><h1>NEON<span>STACK</span></h1><div class="brand-sub" data-text="subtitle"></div></div></div>
       <div class="top-actions"><span class="connection"><i></i>${label('online')}</span><div class="icon-buttons">
+        <button id="mode" class="icon-button mode-button" type="button"><b aria-hidden="true"></b><span></span></button>
         <button id="language" class="icon-button language-button" type="button" data-label="languageSwitch"></button>
         <button id="sound" class="icon-button" type="button" aria-pressed="true">${icon('sound')}</button>
         <button id="pause" class="icon-button" type="button" data-title="pauseShortcut" disabled>${icon('pause')}</button>
@@ -52,7 +55,7 @@ $('#app').innerHTML=`
       </div></div>
     </header>
 
-    <main class="game-layout">
+    <main id="solo" class="game-layout">
       <aside class="stats-side">
         <div class="section-cap desktop-only">${label('session')}<b>///</b></div>
         <section class="score-section"><div class="label" data-text="score"></div><div id="score" class="score-number">000000</div><div class="best"><span>${icon('trophy')} ${label('best')}</span><strong id="best">000000</strong></div></section>
@@ -77,7 +80,7 @@ $('#app').innerHTML=`
       </aside>
     </main>
 
-    <div class="touch-controls" data-label="touchControls">
+    <div id="solo-touch" class="touch-controls" data-label="touchControls">
       <button data-action="hold" class="touch-small" data-label="hold">${icon('hold')}${label('hold')}</button>
       <button data-action="left" data-label="left">${icon('left')}</button>
       <button data-action="rotate" data-label="rotate">${icon('rotate')}${label('rotate')}</button>
@@ -85,6 +88,7 @@ $('#app').innerHTML=`
       <button data-action="down" class="touch-small" data-label="softDrop">${icon('down')}${label('fast')}</button>
       <button data-action="drop" class="touch-drop" data-label="hardDrop">${icon('drop')}${label('drop')}</button>
     </div>
+    <main id="duel" class="duel" aria-labelledby="duel-title" tabindex="-1" hidden></main>
     <footer class="footer"><span><i class="live-dot"></i><b id="footer-status"></b></span><a id="library-link" href="https://www.veldongame.com/games/original/">Veldon Game</a></footer>
     <div id="notice" role="status"></div>
   </div>
@@ -92,10 +96,10 @@ $('#app').innerHTML=`
     <div class="help-top"><span>NEON STACK</span><button id="close-help" type="button" data-label="closeHelp">×</button></div>
     <h2 id="manual-title" data-text="manualTitle"></h2>
     <p data-text="goal"></p>
-    <div class="manual-controls">
+    <div class="manual-controls" id="solo-manual">
       ${[['← →','move'],['↑ / X','rotateCW'],['Z','rotateCCW'],['↓','softPoints'],['SPACE','hardPoints'],['C / SHIFT','holdRule'],['P / ESC','pauseResume']].map(([key,action])=>`<div><kbd>${key}</kbd>${label(action)}</div>`).join('')}
     </div>
-    <p class="manual-tip" data-text="manualTip"></p>
+    <p class="manual-tip" id="manual-tip"></p>
     <div class="scoring">${[100,300,500,800].map((points,index)=>`<span><span data-clear-label="${index+1}"></span> <b>${points}</b></span>`).join('')}</div>
     <small data-text="scoring"></small>
     <button id="help-done" class="primary" type="button">${label('gotIt')} ${icon('right')}</button>
@@ -103,11 +107,13 @@ $('#app').innerHTML=`
 `;
 
 const audio=new NeonAudio();
-let best=readBest(),renderer,feedbackTimer,hudCache='',previewCache='',noticeTimer,held={},horizontalTime=0,repeatTime=0,touchDown=false;
-let lastClear,footerStatus='footerReady';
+let best=readBest(),renderer,feedbackTimer,hudCache='',previewCache='',noticeTimer;
+let lastClear,footerStatus='footerReady',gesture=null,inDuel=false;
 const game=new NeonGame((name,data={})=>{
   audio.effect(name,data);renderer?.event(name,data);
-  if(['pause','over','start','resume'].includes(name)) {held={};touchDown=false;updateOverlay();}
+  if(['pause','over','start','resume'].includes(name)) {
+    soloInput.clear();gesture=null;updateOverlay();
+  }
   if(name==='clear') {
     lastClear=data;
     renderClear();
@@ -125,7 +131,9 @@ const game=new NeonGame((name,data={})=>{
     setFooter(newBest?'footerRecord':'footerOver');
   }
 });
+const soloInput=new BoardInput(game);
 renderer=new Renderer($('#board'),game);
+const duel=createDuel($('#duel'),audio,icon,updatePauseButton);
 
 function notifySaveFailure() {
   const notice=$('#notice');
@@ -137,7 +145,7 @@ function notifySaveFailure() {
 
 function setFooter(key) {
   footerStatus=key;
-  $('#footer-status').textContent=words()[key];
+  $('#footer-status').textContent=inDuel?words().duelTitle:words()[key];
 }
 
 function renderClear() {
@@ -172,15 +180,47 @@ function applyLanguage() {
   languageButton.title=strings.languageSwitch;
   $('#library-link').href='https://www.veldongame.com/games/original/?lang='+language;
   if($('#notice').classList.contains('visible'))$('#notice').textContent=strings.saveFailed;
+  duel.setLanguage(strings);
+  updateModeButton();
   updateSoundButton();
   updateOverlay();
   setFooter(footerStatus);
   renderClear();
 }
 
-function focusBoard() { $('#board').focus({preventScroll:true}); }
+function updateModeButton() {
+  const strings=words();
+  const button=$('#mode');
+  const label=inDuel?strings.soloMode:strings.duelMode;
+  button.querySelector('b').textContent=inDuel?'1P':'2P';
+  button.querySelector('span').textContent=label;
+  button.setAttribute('aria-label',label);
+  button.setAttribute('aria-controls',inDuel?'solo':'duel');
+  button.title=label;
+  $('#solo-manual').hidden=inDuel;
+  $('#manual-tip').textContent=inDuel?strings.duelTip:strings.manualTip;
+}
+
+function focusBoard() {
+  if (inDuel) duel.focus();
+  else $('#board').focus({preventScroll:true});
+}
+
 function restoreBoardAfterClick(event) {
-  if(event.detail>0&&game.mode==='playing')focusBoard();
+  if(event.detail>0&&(inDuel?duel.mode:game.mode)==='playing')focusBoard();
+}
+
+function switchMode() {
+  if(inDuel)duel.pause();
+  else game.pause();
+  inDuel=!inDuel;
+  $('#solo').hidden=inDuel;
+  $('#solo-touch').hidden=inDuel;
+  $('#duel').hidden=!inDuel;
+  updateModeButton();
+  updatePauseButton();
+  setFooter(footerStatus);
+  focusBoard();
 }
 
 function start() {
@@ -196,8 +236,17 @@ function start() {
 function pauseToggle() {
   audio.unlock();
   if($('#help-dialog').open)return;
+  if(inDuel){duel.togglePause();return;}
   if(game.mode==='playing')game.pause();
   else if(game.mode==='paused'){game.resume();focusBoard();}
+}
+
+function updatePauseButton() {
+  const mode=inDuel?duel.mode:game.mode;
+  const button=$('#pause');
+  button.disabled=mode==='ready'||mode==='over';
+  button.innerHTML=icon(mode==='paused'?'play':'pause');
+  button.setAttribute('aria-label',mode==='paused'?words().resume:words().pause);
 }
 
 function updateOverlay(){
@@ -205,9 +254,7 @@ function updateOverlay(){
   const overlay=$('#game-overlay');
   overlay.classList.toggle('hidden',game.mode==='playing');
   $('.board-shade').classList.toggle('visible',game.mode!=='playing');
-  $('#pause').disabled=game.mode==='ready'||game.mode==='over';
-  $('#pause').innerHTML=icon(game.mode==='paused'?'play':'pause');
-  $('#pause').setAttribute('aria-label',game.mode==='paused'?strings.resume:strings.pause);
+  updatePauseButton();
   $('#state-label').textContent=strings[game.mode];
   $('.playfield').dataset.mode=game.mode;
   if(game.mode==='playing'){overlay.innerHTML='';return;}
@@ -220,6 +267,7 @@ function updateOverlay(){
 }
 applyLanguage();
 
+$('#mode').addEventListener('click',switchMode);
 $('#language').addEventListener('click',event=>{
   language=language==='en'?'zh':'en';
   const nextUrl=new URL(location.href);
@@ -241,46 +289,50 @@ $('#pause').addEventListener('click',pauseToggle);
 for(const selector of ['#hold-button','#mobile-hold-button']) {
   $(selector).addEventListener('click',event=>{audio.unlock();game.swap();restoreBoardAfterClick(event);});
 }
-$('#help').addEventListener('click',()=>{if(game.mode==='playing')game.pause();$('#help-dialog').showModal();});
+$('#help').addEventListener('click',()=>{
+  if(inDuel)duel.pause();
+  else game.pause();
+  $('#help-dialog').showModal();
+});
 $('#close-help').addEventListener('click',()=>$('#help-dialog').close());
 $('#help-done').addEventListener('click',()=>$('#help-dialog').close());
 $('#help-dialog').addEventListener('click',e=>{if(e.target===$('#help-dialog')){const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close();}});
 
-function action(name){audio.unlock();if($('#help-dialog').open)return;if(name==='left')game.move(-1);if(name==='right')game.move(1);if(name==='rotate')game.rotate(1);if(name==='counter')game.rotate(-1);if(name==='drop')game.hardDrop();if(name==='hold')game.swap();}
-const keyActions={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'rotate',KeyX:'rotate',KeyZ:'counter',Space:'drop',KeyC:'hold',ShiftLeft:'hold',ShiftRight:'hold'};
+const keyActions={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'rotate',ArrowDown:'down',KeyX:'rotate',KeyZ:'counter',Space:'drop',KeyC:'hold',ShiftLeft:'hold',ShiftRight:'hold'};
 document.addEventListener('keydown',e=>{
   if($('#help-dialog').open||e.ctrlKey||e.metaKey||e.altKey)return;
   if((e.code==='Space'||e.code==='Enter')&&e.target.closest?.('button,a'))return;
-  if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space','KeyP','Escape','KeyC','KeyZ','KeyX','ShiftLeft','ShiftRight','Enter'].includes(e.code))e.preventDefault();else return;
+  if(inDuel){duel.keyDown(e);return;}
+  const action=keyActions[e.code];
+  if(!action&&e.code!=='Enter'&&e.code!=='KeyP'&&e.code!=='Escape')return;
+  e.preventDefault();
   if(e.repeat)return;
   audio.unlock();
   if(e.code==='Enter' && (game.mode==='ready'||game.mode==='over')){start();return;}
   if(e.code==='KeyP'||e.code==='Escape'){pauseToggle();return;}
-  held[e.code]=true;
-  if(e.code==='ArrowLeft'||e.code==='ArrowRight'){horizontalTime=0;repeatTime=0;}
-  if(keyActions[e.code])action(keyActions[e.code]);
+  if(action&&game.mode==='playing')soloInput.press(e.code,action);
 });
-document.addEventListener('keyup',e=>{delete held[e.code];});
-window.addEventListener('blur',()=>{held={};touchDown=false;game.pause();});
-document.addEventListener('visibilitychange',()=>{if(document.hidden){held={};touchDown=false;game.pause();}});
-
-for(const button of document.querySelectorAll('[data-action]')) {
-  button.addEventListener('pointerdown',e=>{
-    e.preventDefault();button.setPointerCapture(e.pointerId);button.classList.add('pressed');
-    const a=button.dataset.action;action(a);
-    if(a==='down')touchDown=true;
-    if(a==='left'||a==='right'){held[a]=true;horizontalTime=0;repeatTime=0;}
-  });
-  const release=()=>{button.classList.remove('pressed');if(button.dataset.action==='down')touchDown=false;delete held[button.dataset.action];};
-  button.addEventListener('pointerup',release);button.addEventListener('pointercancel',release);button.addEventListener('lostpointercapture',release);
+document.addEventListener('keyup',e=>{
+  soloInput.release(e.code);
+  duel.keyUp(e.code);
+});
+function pauseForBlur() {
+  soloInput.clear();
+  gesture=null;
+  game.pause();
+  duel.pause();
 }
-let gesture=null;
+window.addEventListener('blur',pauseForBlur);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseForBlur();});
+
+bindTouchControls($('#solo-touch'),soloInput,()=>!inDuel&&game.mode==='playing',()=>audio.unlock());
 $('#board').addEventListener('pointerdown',e=>{if(game.mode!=='playing')return;e.preventDefault();$('#board').setPointerCapture(e.pointerId);gesture={x:e.clientX,y:e.clientY,t:performance.now()};});
 $('#board').addEventListener('pointerup',e=>{
   if(!gesture)return;const dx=e.clientX-gesture.x,dy=e.clientY-gesture.y;
-  if(dy>38 && dy>Math.abs(dx)*1.2)action('drop');
-  else if(Math.abs(dx)>20){const steps=Math.max(1,Math.round(Math.abs(dx)/($('#board').clientWidth/10)));for(let i=0;i<steps;i++)action(dx>0?'right':'left');}
-  else if(Math.abs(dy)<20 && performance.now()-gesture.t<450)action('rotate');gesture=null;
+  audio.unlock();
+  if(dy>38 && dy>Math.abs(dx)*1.2)soloInput.trigger('drop');
+  else if(Math.abs(dx)>20){const steps=Math.max(1,Math.round(Math.abs(dx)/($('#board').clientWidth/10)));for(let i=0;i<steps;i++)soloInput.trigger(dx>0?'right':'left');}
+  else if(Math.abs(dy)<20 && performance.now()-gesture.t<450)soloInput.trigger('rotate');gesture=null;
 });
 $('#board').addEventListener('pointercancel',()=>gesture=null);
 
@@ -293,11 +345,14 @@ function hud(){
 let last=performance.now();
 function tick(now){
   const dt=Math.min(50,now-last);last=now;
-  if(game.mode==='playing'){
-    const left=held.ArrowLeft||held.left,right=held.ArrowRight||held.right;
-    if(left!==right && (left||right)) {horizontalTime+=dt;if(horizontalTime>165){repeatTime+=dt;while(repeatTime>=48){game.move(left?-1:1);repeatTime-=48;}}} else {horizontalTime=0;repeatTime=0;}
-    game.update(dt,held.ArrowDown||touchDown);
+  if(inDuel)duel.tick(dt);
+  else {
+    if(game.mode==='playing')game.update(dt,soloInput.update(dt));
+    renderer.draw(dt);
+    hud();
   }
-  audio.playing=game.mode==='playing';audio.update();renderer.draw(dt);hud();requestAnimationFrame(tick);
+  audio.playing=(inDuel?duel.mode:game.mode)==='playing';
+  audio.update();
+  requestAnimationFrame(tick);
 }
 requestAnimationFrame(tick);

@@ -6,11 +6,33 @@
 
 `←` / `→` 移动，`↑` / `X` 顺转，`Z` 逆转，`↓` 软降，空格硬降，`C` / `Shift` 暂存，`P` / `Esc` 暂停或继续，`Enter` 开始或重开。
 
+点击顶部「双人」进入同屏对决。两人使用相同的方块序列，最后存活的人获胜。
+
+| 操作 | 玩家 1 | 玩家 2 |
+| --- | --- | --- |
+| 移动 | A / D | ← / → |
+| 顺转 / 逆转 | W / Q | ↑ / `/` |
+| 软降 / 硬降 | S / F | ↓ / Enter |
+| 暂存 | E | 右 Shift |
+
+`P` 或 `Esc` 可同时暂停两块棋盘。触屏玩家用各自棋盘下的按钮操作。
+
 ## English
 
 A cyberpunk falling-block puzzle. Stack pieces to clear rows and level up every ten lines. Play with a keyboard, touch buttons, or swipes. Switch languages from the toolbar. Your best score is saved in this browser. [Play in your browser](https://rogerh2018.github.io/veldon-002-original-neon-stack/?lang=en)
 
 Use `←` / `→` to move, `↑` / `X` to rotate clockwise, `Z` to rotate counterclockwise, `↓` to soft drop, Space to hard drop, `C` / `Shift` to hold, `P` / `Esc` to pause or resume, and `Enter` to start or play again.
+
+Choose **Two players** for a local match. Both players receive the same pieces and the last player standing wins.
+
+| Action | Player 1 | Player 2 |
+| --- | --- | --- |
+| Move | A / D | ← / → |
+| Rotate clockwise / counterclockwise | W / Q | ↑ / `/` |
+| Soft drop / hard drop | S / F | ↓ / Enter |
+| Hold | E | Right Shift |
+
+Press `P` or `Esc` to pause both boards. On a touchscreen, use the buttons beneath each board.
 
 ## 本地开发 / Development
 

@@ -1,0 +1,184 @@
+.mode-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  padding: 0 10px;
+  gap: 6px;
+  color: var(--cyan);
+  border-color: #4de8e970;
+  white-space: nowrap;
+}
+
+.mode-button b { font: 750 12px var(--mono); }
+.mode-button span { font-size: 11px; }
+
+.duel {
+  --duel-height: clamp(225px, calc(100dvh - 401px), 540px);
+  flex: 1;
+  width: min(100%, 890px);
+  align-self: center;
+  padding: 24px 0 18px;
+}
+
+.duel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+  min-height: 67px;
+}
+
+.duel-header h2 { margin: 0; color: #edf7ff; font-size: clamp(21px, 3vw, 32px); }
+.duel-header p { margin: 7px 0 0; color: #b7ccdc; font-size: 13px; line-height: 1.5; }
+.duel[data-phase="over"] #duel-status { color: var(--cyan); font-weight: 750; }
+.duel:focus-visible { outline: 1px solid #4de8e946; outline-offset: 2px; }
+
+.duel-players {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: clamp(10px, 3vw, 32px);
+}
+
+.duel-player {
+  --player-accent: var(--cyan);
+  min-width: 0;
+  padding: 12px;
+  background: #081322df;
+  border: 1px solid #6796ac51;
+  border-top-color: var(--player-accent);
+}
+
+.duel-player[data-player="2"] { --player-accent: var(--pink); }
+.duel-player[data-result="won"] { box-shadow: 0 0 23px color-mix(in srgb, var(--player-accent) 24%, transparent); }
+.duel-player[data-result="lost"] .duel-board { opacity: .66; }
+
+.duel-player-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 5px;
+  min-height: 25px;
+  margin-bottom: 10px;
+}
+
+.duel-player-header h3 { margin: 0; color: var(--player-accent); font-size: 16px; line-height: 1.2; }
+.duel-result { color: #d5effa; font: 700 11px var(--mono); text-transform: uppercase; }
+
+.duel-field {
+  display: grid;
+  grid-template-columns: minmax(0, calc(var(--duel-height) / 2 + 8px)) minmax(62px, 1fr);
+  justify-content: center;
+  gap: 14px;
+}
+
+.duel-board-frame {
+  align-self: start;
+  width: 100%;
+  padding: 3px;
+  border: 1px solid color-mix(in srgb, var(--player-accent) 64%, #152333);
+  background: #07111c;
+}
+
+.duel-board { display: block; width: 100%; height: auto; aspect-ratio: 1 / 2; }
+.duel-stats { display: grid; align-content: start; gap: 14px; margin: 0; }
+.duel-stats dt { color: #a6bed1; font: 10px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.duel-stats dd { margin: 4px 0 0; color: #ecf7ff; font: 700 clamp(13px, 1.9vw, 22px) var(--mono); }
+.duel-preview { border-top: 1px solid #416071; padding-top: 9px; }
+.duel-preview canvas { display: block; width: 100%; max-width: 105px; height: auto; }
+
+.duel-keys {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px 7px;
+  padding-top: 11px;
+  border-top: 1px solid #455e76;
+  margin: 12px 0 0;
+}
+
+.duel-keys > div { min-width: 0; }
+.duel-keys dd { margin: 2px 0 0; color: #afc5d4; font-size: 11px; line-height: 1.3; }
+.duel-keys kbd { color: var(--player-accent); white-space: nowrap; }
+.duel-touch { display: none; }
+
+@media (min-width: 1000px) {
+  .duel-keys { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+
+@media (min-width: 681px) and (max-width: 999px) and (min-height: 501px) {
+  .duel { --duel-height: clamp(215px, calc(100dvh - 429px), 510px); }
+}
+
+@media (pointer: coarse), (max-width: 680px) {
+  .duel-touch {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px;
+    margin-top: 8px;
+  }
+
+  .duel-touch button {
+    display: grid;
+    place-items: center;
+    min-height: 38px;
+    padding: 2px;
+    color: #c6deed;
+    border: 1px solid #527387;
+    background: #11283c;
+    touch-action: none;
+    user-select: none;
+  }
+
+  .duel-touch svg { width: 18px; height: 18px; }
+  .duel-touch button[data-action="drop"] { color: var(--player-accent); border-color: var(--player-accent); }
+  .duel-touch button.pressed { background: #28546d; color: #fff; }
+  .duel-touch button:disabled { opacity: .44; }
+  .duel-keys { display: none; }
+}
+
+@media (max-width: 680px) {
+  .mode-button { min-width: 31px; padding: 0 5px; }
+  .mode-button span { display: none; }
+  .duel { padding: 10px 0 8px; }
+  .duel-header { min-height: 59px; gap: 6px; margin-bottom: 9px; }
+  .duel-header h2 { font-size: 18px; }
+  .duel-header p { font-size: 11px; margin-top: 4px; }
+  .duel-header .primary { padding: 6px 9px; letter-spacing: .04em; }
+  .duel-player { padding: 6px; }
+  .duel-player-header { margin-bottom: 5px; }
+  .duel-player-header h3 { font-size: 13px; }
+  .duel-result { font-size: 9px; }
+  .duel-field { display: flex; flex-direction: column-reverse; gap: 6px; }
+  .duel-board-frame { width: min(100%, max(92px, calc((100dvh - 310px) / 2))); margin: auto; padding: 2px; }
+  .duel-stats { grid-template-columns: 1.35fr .95fr .95fr .85fr .85fr; gap: 3px; }
+  .duel-stats dt { font-size: 8px; letter-spacing: 0; }
+  .duel-stats dd { margin-top: 3px; font-size: 10px; }
+  .duel-preview { padding: 0; border: 0; }
+  .duel-preview canvas { width: 100%; }
+}
+
+@media (max-width: 360px) {
+  .topbar .icon-buttons { gap: 3px; }
+  .topbar .icon-button:not(.mode-button, .language-button) { width: 26px; }
+  .duel-players { gap: 7px; }
+  .duel-player { padding: 4px; }
+}
+
+@media (max-height: 500px) and (min-width: 681px) {
+  .duel { --duel-height: clamp(140px, calc(100dvh - 205px), 300px); padding: 6px 0; }
+  .duel-header { min-height: 40px; margin-bottom: 5px; }
+  .duel-header h2 { font-size: 21px; }
+  .duel-header p { font-size: 11px; margin-top: 2px; }
+  .duel-player { padding: 6px; }
+  .duel-player-header { min-height: 20px; margin-bottom: 5px; }
+  .duel-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px 8px; }
+  .duel-stats > div:first-child { grid-column: 1 / -1; }
+  .duel-stats dd { font-size: 15px; }
+  .duel-preview { padding-top: 3px; }
+  .duel-preview canvas { max-width: 70px; }
+  .duel-keys { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .duel-touch { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
