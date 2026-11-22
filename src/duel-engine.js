@@ -33,11 +33,10 @@ export class NeonDuel {
   update(dt, softDrops = []) {
     if (this.mode !== 'playing') return false;
     this.boards.forEach((board, index) => board.update(dt, softDrops[index]));
-    const [first, second] = this.boards.map(board => board.mode === 'over');
-    if (!first && !second) return false;
-    this.winner = first && second ? 0 : first ? 2 : 1;
+    const [first, second] = this.boards;
+    if (first.mode !== 'over' || second.mode !== 'over') return false;
+    this.winner = first.score === second.score ? 0 : first.score > second.score ? 1 : 2;
     this.mode = 'over';
-    for (const board of this.boards) board.pause();
     return true;
   }
 }

@@ -53,6 +53,7 @@
 
 .duel-player[data-player="2"] { --player-accent: var(--pink); }
 .duel-player[data-result="won"] { box-shadow: 0 0 23px color-mix(in srgb, var(--player-accent) 24%, transparent); }
+.duel-player[data-result="finished"] .duel-board { opacity: .76; }
 .duel-player[data-result="lost"] .duel-board { opacity: .66; }
 
 .duel-player-header {

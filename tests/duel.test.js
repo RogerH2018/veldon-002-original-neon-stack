@@ -18,11 +18,24 @@ test('both players receive the same piece sequence and update independently', ()
   }
 });
 
-test('a losing board ends the match and the winner stays frozen until a rematch', () => {
+test('the remaining player can overtake a frozen final score and win', () => {
   const match = new NeonDuel();
   match.start(12345);
   const [first, second] = match.boards;
+  first.score = 20;
   first.end();
+  assert.equal(match.update(16), false);
+  assert.equal(match.mode, 'playing');
+  assert.equal(match.winner, null);
+  const firstFinalState = first.snapshot();
+
+  second.hardDrop();
+  assert.ok(second.score > first.score);
+  assert.equal(match.update(16, [true, false]), false);
+  first.hardDrop();
+  assert.deepEqual(first.snapshot(), firstFinalState);
+
+  second.end();
   assert.equal(match.update(16), true);
   assert.equal(match.winner, 2);
   assert.equal(match.mode, 'over');
@@ -39,12 +52,45 @@ test('a losing board ends the match and the winner stays frozen until a rematch'
   }
 });
 
-test('two top-outs in the same update count as a draw', () => {
+test('the first player to finish wins if the other player stays behind', () => {
   const match = new NeonDuel();
   match.start(12345);
-  for (const board of match.boards) board.end();
+  const [first, second] = match.boards;
+  first.score = 1000;
+  first.end();
+  assert.equal(match.update(16), false);
+  assert.equal(match.pause(), true);
+  match.update(1000, [true, true]);
+  assert.equal(second.score, 0);
+  assert.equal(match.resume(), true);
+  assert.equal(first.mode, 'over');
+  assert.equal(second.mode, 'playing');
+  second.hardDrop();
+  assert.ok(second.score > 0 && second.score < first.score);
+  second.end();
+  assert.equal(match.update(16), true);
+  assert.equal(match.winner, 1);
+});
+
+test('equal final scores count as a draw regardless of when each board finished', () => {
+  const match = new NeonDuel();
+  match.start(12345);
+  for (const board of match.boards) board.score = 500;
+  match.boards[1].end();
+  assert.equal(match.update(16), false);
+  match.boards[0].end();
   assert.equal(match.update(0), true);
   assert.equal(match.winner, 0);
+});
+
+test('different scores decide the winner when both boards finish in the same update', () => {
+  const match = new NeonDuel();
+  match.start(12345);
+  match.boards[0].score = 37;
+  match.boards[1].score = 36;
+  for (const board of match.boards) board.end();
+  assert.equal(match.update(0), true);
+  assert.equal(match.winner, 1);
 });
 
 test('pause and resume apply to both boards', () => {

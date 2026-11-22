@@ -6,7 +6,7 @@
 
 `←` / `→` 移动，`↑` / `X` 顺转，`Z` 逆转，`↓` 软降，空格硬降，`C` / `Shift` 暂存，`P` / `Esc` 暂停或继续，`Enter` 开始或重开。
 
-点击顶部「双人」进入同屏对决。两人使用相同的方块序列，最后存活的人获胜。
+点击顶部「双人」进入同屏对决。两人使用相同的方块序列。一人结束后，另一人可以继续追分。两人都结束后，最终得分较高者获胜，同分平局。
 
 | 操作 | 玩家 1 | 玩家 2 |
 | --- | --- | --- |
@@ -23,7 +23,7 @@ A cyberpunk falling-block puzzle. Stack pieces to clear rows and level up every 
 
 Use `←` / `→` to move, `↑` / `X` to rotate clockwise, `Z` to rotate counterclockwise, `↓` to soft drop, Space to hard drop, `C` / `Shift` to hold, `P` / `Esc` to pause or resume, and `Enter` to start or play again.
 
-Choose **Two players** for a local match. Both players receive the same pieces and the last player standing wins.
+Choose **Two players** for a local match. Both players receive the same pieces. When one player finishes, the other keeps playing. The higher final score wins after both runs end. Equal scores are a draw.
 
 | Action | Player 1 | Player 2 |
 | --- | --- | --- |

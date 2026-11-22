@@ -105,6 +105,8 @@ export function createDuel(root, audio, icon, onModeChange) {
   });
 
   let strings;
+  let displayedFinished = -1;
+  const findFinished = () => match.boards.findIndex(board => board.mode === 'over');
 
   function focus() {
     root.focus({ preventScroll: true });
@@ -112,10 +114,18 @@ export function createDuel(root, audio, icon, onModeChange) {
 
   function renderState() {
     root.dataset.phase = match.mode;
+    displayedFinished = findFinished();
+    const playingMessage = displayedFinished === -1
+      ? strings.duelPlaying
+      : strings.duelChase(
+          displayedFinished + 1,
+          match.boards[displayedFinished].score.toLocaleString(document.documentElement.lang),
+          2 - displayedFinished,
+        );
     const actionText = { ready: strings.duelStart, paused: strings.resume, over: strings.duelReplay };
     const messages = {
       ready: strings.duelReady,
-      playing: strings.duelPlaying,
+      playing: playingMessage,
       paused: strings.paused,
       over: match.winner ? strings.duelWinner(match.winner) : strings.duelTie,
     };
@@ -123,12 +133,17 @@ export function createDuel(root, audio, icon, onModeChange) {
     actionButton.hidden = match.mode === 'playing';
     actionButton.textContent = actionText[match.mode] ?? '';
     views.forEach((view, index) => {
-      const result = match.mode === 'over' ? (match.winner === 0 ? 'tie' : match.winner === index + 1 ? 'won' : 'lost') : '';
+      const board = match.boards[index];
+      const result = match.mode === 'over'
+        ? (match.winner === 0 ? 'tie' : match.winner === index + 1 ? 'won' : 'lost')
+        : board.mode === 'over' ? 'finished' : '';
       view.panel.dataset.result = result;
       view.result.hidden = !result;
-      view.result.textContent = { tie: strings.duelTie, won: strings.duelWon, lost: strings.duelLost }[result] ?? '';
+      view.result.textContent = {
+        tie: strings.duelTie, won: strings.duelWon, lost: strings.duelLost, finished: strings.duelFinished,
+      }[result] ?? '';
       for (const button of view.touch.querySelectorAll('button')) {
-        button.disabled = match.mode !== 'playing';
+        button.disabled = match.mode !== 'playing' || board.mode !== 'playing';
         if (button.disabled) button.classList.remove('pressed');
       }
     });
@@ -197,7 +212,7 @@ export function createDuel(root, audio, icon, onModeChange) {
       const binding = bindings.get(event.code);
       if (!binding) return;
       event.preventDefault();
-      if (event.repeat || match.mode !== 'playing') return;
+      if (event.repeat || match.mode !== 'playing' || binding.input.game.mode !== 'playing') return;
       audio.unlock();
       binding.input.press(event.code, binding.action);
     },
@@ -205,9 +220,18 @@ export function createDuel(root, audio, icon, onModeChange) {
       bindings.get(code)?.input.release(code);
     },
     tick(dt) {
-      if (match.mode === 'playing' && match.update(dt, views.map(view => view.input.update(dt)))) {
-        audio.effect('over');
-        changeRound();
+      if (match.mode === 'playing') {
+        const softDrops = views.map(view => view.input.game.mode === 'playing' && view.input.update(dt));
+        if (match.update(dt, softDrops)) {
+          audio.effect('over');
+          changeRound();
+        } else {
+          const finished = findFinished();
+          if (finished !== displayedFinished) {
+            views[finished].input.clear();
+            renderState();
+          }
+        }
       }
       views.forEach((view, index) => {
         const board = match.boards[index];
