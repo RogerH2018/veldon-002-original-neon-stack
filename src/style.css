@@ -18,3 +18,12 @@ dialog{background:#0b1524;color:#d6e7f5;border:1px solid #4de8e960;width:420px;m
 @media(max-height:490px) and (min-width:681px){.desktop-hold,.level-progress,.controls-guide{display:none!important}}
 @media(hover:none) and (max-height:490px) and (min-width:681px){:root{--well-height:calc(100dvh - 213px)}}
 @media(max-width:680px){.city-bg{background-position:left center;background-size:auto 100%;opacity:.5}.city-bg:after{content:'';position:absolute;inset:0 0 0 45%;background:url('/art/neon-city.png') right center/auto 100% no-repeat;mask-image:linear-gradient(to right,transparent,#000 65%)}}
+
+.language-button{width:auto;min-width:42px;padding:0 7px;white-space:nowrap;font-size:12px;font-weight:700}
+.footer a{color:inherit;font-size:11px;text-decoration:underline;text-underline-offset:3px}
+#board:focus-visible,.footer a:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.well-footer .signal-bars{margin-left:auto}
+.scoring{gap:5px;font-size:10px}
+.scoring>span{display:flex;gap:4px;align-items:center}
+.scoring b{margin-left:0}
+@media(max-width:680px){.topbar{gap:8px}.language-button{min-width:34px;font-size:11px}.footer{justify-content:space-between}.footer a{font-size:10px}.touch-controls button span{letter-spacing:0}}

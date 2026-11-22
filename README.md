@@ -1,9 +1,26 @@
 # NEON STACK · 霓虹堆栈
 
-赛博朋克俄罗斯方块小游戏。Vite、原生 JavaScript、Canvas 2D 与 Web Audio，支持键盘、触屏按钮与滑动手势。
+## 中文
 
-运行 `npm install` 安装依赖，`npm run dev` 启动开发模式，`npm run build` 构建到 `dist/`，`npm test` 检查核心玩法规则。OhMyGame 编辑器会管理预览服务器。
+赛博朋克方块消除游戏。堆叠方块，填满横行，每消除十行提升一级。支持键盘、触屏按钮和滑动手势。顶部按钮可切换中英文，最高分保存在当前浏览器。 [网页试玩](https://www.veldongame.com/games/original/neon-stack/?lang=zh)
 
-← → 移动，↑ / X 顺时针旋转，Z 逆时针旋转，↓ 软降，空格硬降，C / Shift 暂存，P / Esc 暂停，Enter 开始或重开。
+`←` / `→` 移动，`↑` / `X` 顺转，`Z` 逆转，`↓` 软降，空格硬降，`C` / `Shift` 暂存，`P` / `Esc` 暂停或继续，`Enter` 开始或重开。
 
-最高分通过 OhMyGame SDK 的 `game.storage` 保存。设计文档与生成素材位于 `canvas/`，实际使用的城市背景位于 `public/art/`。运行时资源不依赖素材生成目录。
+## English
+
+A cyberpunk falling-block puzzle. Stack pieces to clear rows and level up every ten lines. Play with a keyboard, touch buttons, or swipes. Switch languages from the toolbar. Your best score is saved in this browser. [Play in your browser](https://www.veldongame.com/games/original/neon-stack/?lang=en)
+
+Use `←` / `→` to move, `↑` / `X` to rotate clockwise, `Z` to rotate counterclockwise, `↓` to soft drop, Space to hard drop, `C` / `Shift` to hold, `P` / `Esc` to pause or resume, and `Enter` to start or play again.
+
+## 本地开发 / Development
+
+```sh
+npm ci
+npm run dev
+npm test
+npm run build
+```
+
+静态构建输出位于 `dist/`。游戏使用 Vite、原生 JavaScript、Canvas 2D 和 Web Audio。设计资料见 `canvas/`，运行时背景见 `public/art/`。
+
+The static build is written to `dist/`. The game uses Vite, vanilla JavaScript, Canvas 2D, and Web Audio. Design files live in `canvas/` and runtime artwork in `public/art/`.
